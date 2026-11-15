@@ -1,0 +1,17 @@
+# Render "Blueprint": one-click deploy of the backend.
+# Dashboard -> New -> Blueprint -> select your GitHub repo.
+services:
+  - type: web
+    name: qcm-pilot-api
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: AI_PROVIDER
+        value: gemini
+      - key: GEMINI_API_KEY
+        sync: false          # you type it in the Render dashboard
+      - key: ACCESS_TOKEN
+        generateValue: true  # Render creates a random secret; copy it into the extension
