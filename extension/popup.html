@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QCM Pilot</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 40 40" width="36" height="36" aria-hidden="true">
+        <defs>
+          <linearGradient id="lg" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#6c8cff" />
+            <stop offset="1" stop-color="#9b6bff" />
+          </linearGradient>
+        </defs>
+        <rect width="40" height="40" rx="10" fill="url(#lg)" />
+        <path d="M20 8 L29 30 L20 25.5 L11 30 Z" fill="#0f1117" opacity="0.92" />
+        <circle cx="20" cy="18" r="2.4" fill="#fff" />
+      </svg>
+      <div>
+        <h1>QCM Pilot</h1>
+        <p class="tagline">Review assistant for MCQ practice</p>
+      </div>
+    </div>
+    <div class="status" id="status" title="Backend status">
+      <span class="dot" id="statusDot"></span>
+      <span id="statusText">Checking…</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="card hero">
+      <button id="autoBtn" class="btn auto" type="button">⚡ Practice Auto-Fill</button>
+      <p class="hint">One click: scans the form, asks the AI, and ticks the suggested answers. You review and press Submit yourself.</p>
+      <label class="check"><input type="checkbox" id="ackBox" />
+        <span>I confirm AI assistance is allowed for this form (practice / permitted use).</span></label>
+      <label class="check"><input type="checkbox" id="skipLowBox" checked />
+        <span>Leave low-confidence questions blank</span></label>
+      <p id="autoMsg" class="hint" role="status"></p>
+    </section>
+
+    <section class="card">
+      <div class="row">
+        <button id="scanBtn" class="btn primary" type="button">Scan Questions</button>
+        <button id="addBtn" class="btn ghost" type="button" title="Add a question by hand">+ Manual</button>
+      </div>
+      <p id="scanMsg" class="hint" role="status">Open a Google Form, then press “Scan Questions”.</p>
+    </section>
+
+    <section class="card" id="editorCard" hidden>
+      <label for="questionSelect">Question</label>
+      <select id="questionSelect"></select>
+
+      <label for="questionText">Question text</label>
+      <textarea id="questionText" rows="4" maxlength="4000" placeholder="Type or fix the question text"></textarea>
+
+      <label for="typeSelect">Answer type</label>
+      <select id="typeSelect">
+        <option value="single">Single answer (radio buttons)</option>
+        <option value="multiple">Several answers (checkboxes)</option>
+      </select>
+
+      <label>Answer choices</label>
+      <div id="optionsList" class="options"></div>
+      <div class="row">
+        <button id="addOptionBtn" class="btn ghost small" type="button">+ Add choice</button>
+        <button id="deleteBtn" class="btn ghost small danger" type="button">Remove question</button>
+      </div>
+
+      <button id="analyzeBtn" class="btn accent" type="button">Analyze</button>
+    </section>
+
+    <section class="card loading" id="loading" hidden aria-live="polite">
+      <div class="spinner" aria-hidden="true"></div>
+      <span>Analyzing the question…</span>
+    </section>
+
+    <section class="card" id="resultCard" hidden aria-live="polite">
+      <div class="result-head">
+        <h2>AI response</h2>
+        <span class="badge" id="confidenceBadge"></span>
+      </div>
+
+      <div id="errorBox" class="notice error" hidden></div>
+
+      <div id="resultBody">
+        <div class="field">
+          <span class="field-label">Suggested answer</span>
+          <div class="answer" id="answerText"></div>
+        </div>
+        <div class="field">
+          <span class="field-label">Exact answer choice</span>
+          <ul class="choices" id="choiceList"></ul>
+        </div>
+        <div class="field">
+          <span class="field-label">Explanation</span>
+          <p id="explanationText" class="explanation"></p>
+        </div>
+        <div class="notice warn" id="cautionBox" hidden>
+          <strong>Warning:</strong> <span id="cautionText"></span>
+        </div>
+        <p class="hint">Review the result yourself before you submit.</p>
+      </div>
+    </section>
+
+    <details class="card settings">
+      <summary>Settings</summary>
+      <label for="backendUrl">Backend URL</label>
+      <div class="row">
+        <input id="backendUrl" type="text" spellcheck="false" />
+        <button id="saveBackendBtn" class="btn ghost small" type="button">Save</button>
+      </div>
+      <label for="accessToken">Access token (only for an online backend)</label>
+      <input id="accessToken" type="password" spellcheck="false" autocomplete="off" placeholder="Leave empty for local use" />
+      <p id="settingsMsg" class="hint">Local: http://127.0.0.1:8000 · Online: https://your-app.onrender.com</p>
+    </details>
+  </main>
+
+  <footer>
+    QCM Pilot never submits a form. Always review the answers. Use it only where AI assistance is allowed.
+  </footer>
+
+  <script src="popup.js"></script>
+</body>
+</html>
